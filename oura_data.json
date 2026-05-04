@@ -7,12 +7,12 @@
     "score": 81
   },
   "activity": {
-    "date": null,
-    "score": null,
-    "steps": null,
-    "activeCalories": null
+    "date": "2026-05-03",
+    "score": 99,
+    "steps": 15496,
+    "activeCalories": 1052
   },
-  "rhr": null,
+  "rhr": 100,
   "spo2": 96.743,
   "stress": {
     "score": 0
