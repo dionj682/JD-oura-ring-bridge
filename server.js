@@ -27,13 +27,13 @@ require('http').createServer((req, res) => {
             steps: raw.activity?.steps ?? null,
             activeCalories: raw.activity?.activeCalories ?? null
           },
-          rhr: raw.sleep?.restingHeartRate ?? null,
-          spo2: raw.spo2?.average ?? null,
+          rhr: raw.rhr ?? null,
+          spo2: raw.spo2 ?? null,
           stress: {
-            score: raw.stress?.stressHigh ?? null
+            score: raw.stress?.score ?? null
           },
           resilience: {
-            level: raw.resilience?.score ?? null,
+            level: raw.resilience?.level ?? null,
             sleepRecovery: raw.resilience?.sleepRecovery ?? null,
             daytimeRecovery: raw.resilience?.daytimeRecovery ?? null,
             stress: raw.resilience?.stress ?? null
