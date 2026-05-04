@@ -1,6 +1,9 @@
 name: Fetch Oura Data
 
 on:
+  schedule:
+    - cron: '0 14 * * *'   # 7:00 AM PT (UTC-7) daily
+    - cron: '0 20 * * *'   # 1:00 PM PT daily
   workflow_dispatch:
 
 jobs:
@@ -10,31 +13,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Fetch Oura data
+      - name: Run process.py
         env:
           OURA_TOKEN: ${{ secrets.OURA_TOKEN }}
-        run: |
-          TODAY=$(date +%Y-%m-%d)
-          YESTERDAY=$(date -d "yesterday" +%Y-%m-%d)
-
-          curl -s "https://api.ouraring.com/v2/usercollection/daily_sleep?start_date=$TODAY&end_date=$TODAY" \
-            -H "Authorization: Bearer $OURA_TOKEN" > daily_sleep_raw.json
-
-          curl -s "https://api.ouraring.com/v2/usercollection/sleep?start_date=$YESTERDAY&end_date=$TODAY" \
-            -H "Authorization: Bearer $OURA_TOKEN" > sleep_raw.json
-
-          curl -s "https://api.ouraring.com/v2/usercollection/daily_readiness?start_date=$TODAY&end_date=$TODAY" \
-            -H "Authorization: Bearer $OURA_TOKEN" > readiness_raw.json
-
-          curl -s "https://api.ouraring.com/v2/usercollection/daily_activity?start_date=$YESTERDAY&end_date=$TODAY" \
-            -H "Authorization: Bearer $OURA_TOKEN" > activity_raw.json
-
-          python3 process.py
+        run: python3 process.py
 
       - name: Commit and push data
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add oura_data.json
-          git commit -m "Update Oura data $(date +%Y-%m-%d)" || echo "No changes"
+          git commit -m "Update Oura data $(date +%Y-%m-%d %H:%M)" || echo "No changes"
           git push
