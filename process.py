@@ -21,7 +21,7 @@ def fetch(endpoint, start, end):
 print("Fetching all Oura endpoints...")
 
 daily_sleep     = fetch("daily_sleep", TODAY, TODAY)
-sleep_sessions  = fetch("sleep", TODAY, TODAY)
+sleep_sessions  = fetch("sleep", YESTERDAY, TODAY)
 readiness       = fetch("daily_readiness", TODAY, TODAY)
 activity        = fetch("daily_activity", YESTERDAY, TODAY)
 stress          = fetch("daily_stress", TODAY, TODAY)
