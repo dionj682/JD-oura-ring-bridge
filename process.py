@@ -22,7 +22,7 @@ print("Fetching Oura endpoints...")
 
 daily_sleep  = fetch("daily_sleep", TODAY, TODAY)
 readiness    = fetch("daily_readiness", TODAY, TODAY)
-activity     = fetch("daily_activity", YESTERDAY, TODAY)
+activity     = fetch("daily_activity", YESTERDAY, YESTERDAY)
 stress       = fetch("daily_stress", TODAY, TODAY)
 resilience   = fetch("daily_resilience", TODAY, TODAY)
 spo2         = fetch("daily_spo2", TODAY, TODAY)
