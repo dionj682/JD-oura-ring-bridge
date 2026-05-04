@@ -1,7 +1,8 @@
 const https = require('https');
-const GITHUB_URL = `https://raw.githubusercontent.com/dionj682/JD-oura-ring-bridge/main/oura_data.json?t=${Date.now()}`;
 
 require('http').createServer((req, res) => {
+  const GITHUB_URL = `https://raw.githubusercontent.com/dionj682/JD-oura-ring-bridge/main/oura_data.json?t=${Date.now()}`;
+  
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('Content-Type', 'application/json');
@@ -12,7 +13,6 @@ require('http').createServer((req, res) => {
     githubRes.on('end', () => {
       try {
         const raw = JSON.parse(data);
-
         const filtered = {
           date: raw.date,
           sleep: {
@@ -39,7 +39,6 @@ require('http').createServer((req, res) => {
             stress: raw.resilience?.stress ?? null
           }
         };
-
         res.writeHead(200);
         res.end(JSON.stringify(filtered, null, 2));
       } catch (e) {
