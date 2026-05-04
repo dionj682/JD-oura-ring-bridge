@@ -66,7 +66,7 @@ output = {
         "steps": a.get('steps'),
         "activeCalories": a.get('active_calories')
     },
-    "rhr": r_contributors.get('resting_heart_rate'),
+    "rhr": r.get('resting_heart_rate'),
     "spo2": sp.get('spo2_percentage', {}).get('average') if sp else None,
     "stress": {
         "score": st.get('stress_high')
