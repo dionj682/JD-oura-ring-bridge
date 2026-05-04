@@ -136,5 +136,6 @@ output = {
 with open('oura_data.json', 'w') as f:
     json.dump(output, f, indent=2)
 
+print("SLEEP SESSIONS RAW:", json.dumps(sleep_sessions, indent=2))
 print("OUTPUT:", json.dumps({k: v for k, v in output.items() if k != 'raw'}, indent=2))
 print("Done.")
