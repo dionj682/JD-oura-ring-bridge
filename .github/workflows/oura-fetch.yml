@@ -14,18 +14,26 @@ jobs:
         env:
           OURA_TOKEN: ${{ secrets.OURA_TOKEN }}
         run: |
-          curl -s "https://api.ouraring.com/v2/usercollection/daily_sleep?start_date=$(date +%Y-%m-%d)&end_date=$(date +%Y-%m-%d)" \
+          TODAY=$(date +%Y-%m-%d)
+          YESTERDAY=$(date -d "yesterday" +%Y-%m-%d)
+
+          curl -s "https://api.ouraring.com/v2/usercollection/daily_sleep?start_date=$TODAY&end_date=$TODAY" \
+            -H "Authorization: Bearer $OURA_TOKEN" > daily_sleep_raw.json
+
+          curl -s "https://api.ouraring.com/v2/usercollection/sleep?start_date=$TODAY&end_date=$TODAY" \
             -H "Authorization: Bearer $OURA_TOKEN" > sleep_raw.json
 
-          curl -s "https://api.ouraring.com/v2/usercollection/daily_readiness?start_date=$(date +%Y-%m-%d)&end_date=$(date +%Y-%m-%d)" \
+          curl -s "https://api.ouraring.com/v2/usercollection/daily_readiness?start_date=$TODAY&end_date=$TODAY" \
             -H "Authorization: Bearer $OURA_TOKEN" > readiness_raw.json
 
-          curl -s "https://api.ouraring.com/v2/usercollection/daily_activity?start_date=$(date +%Y-%m-%d)&end_date=$(date +%Y-%m-%d)" \
+          curl -s "https://api.ouraring.com/v2/usercollection/daily_activity?start_date=$YESTERDAY&end_date=$TODAY" \
             -H "Authorization: Bearer $OURA_TOKEN" > activity_raw.json
 
           python3 - <<'EOF'
           import json, datetime
 
+          with open('daily_sleep_raw.json') as f:
+              daily_sleep = json.load(f)
           with open('sleep_raw.json') as f:
               sleep = json.load(f)
           with open('readiness_raw.json') as f:
@@ -33,51 +41,10 @@ jobs:
           with open('activity_raw.json') as f:
               activity = json.load(f)
 
-          print("SLEEP RAW:", json.dumps(sleep, indent=2))
-          print("READINESS RAW:", json.dumps(readiness, indent=2))
-          print("ACTIVITY RAW:", json.dumps(activity, indent=2))
-
-          s = sleep['data'][0] if sleep.get('data') else {}
+          ds = daily_sleep['data'][0] if daily_sleep.get('data') else {}
+          
+          # Get the longest sleep session for detailed metrics
+          sleep_sessions = sleep.get('data', [])
+          s = max(sleep_sessions, key=lambda x: x.get('total_sleep_duration', 0)) if sleep_sessions else {}
+          
           r = readiness['data'][0] if readiness.get('data') else {}
-          a = activity['data'][0] if activity.get('data') else {}
-
-          contributors = r.get('contributors', {})
-
-          output = {
-            "date": str(datetime.date.today()),
-            "sleep": {
-              "score": s.get('score'),
-              "hrv": s.get('average_hrv'),
-              "restingHeartRate": s.get('lowest_heart_rate'),
-              "deepSleepSeconds": s.get('deep_sleep_duration'),
-              "remSleepSeconds": s.get('rem_sleep_duration'),
-              "restfulnessScore": s.get('restless_periods'),
-              "totalSleepSeconds": s.get('total_sleep_duration')
-            },
-            "readiness": {
-              "score": r.get('score'),
-              "hrvBalance": contributors.get('hrv_balance'),
-              "bodyTemperature": contributors.get('body_temperature'),
-              "restingHeartRate": contributors.get('resting_heart_rate')
-            },
-            "activity": {
-              "date": str(datetime.date.today()),
-              "steps": a.get('steps'),
-              "activeCalories": a.get('active_calories'),
-              "score": a.get('score')
-            }
-          }
-
-          with open('oura_data.json', 'w') as f:
-              json.dump(output, f, indent=2)
-
-          print("OUTPUT:", json.dumps(output, indent=2))
-          EOF
-
-      - name: Commit and push data
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add oura_data.json
-          git commit -m "Update Oura data $(date +%Y-%m-%d)" || echo "No changes"
-          git push
