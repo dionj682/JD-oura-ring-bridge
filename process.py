@@ -22,7 +22,7 @@ print("Fetching Oura endpoints...")
 
 daily_sleep  = fetch("daily_sleep", TODAY, TODAY)
 readiness    = fetch("daily_readiness", TODAY, TODAY)
-activity     = fetch("daily_activity", TODAY, TODAY)
+activity     = fetch("daily_activity", YESTERDAY, TODAY)
 stress       = fetch("daily_stress", TODAY, TODAY)
 resilience   = fetch("daily_resilience", TODAY, TODAY)
 spo2         = fetch("daily_spo2", TODAY, TODAY)
@@ -34,13 +34,13 @@ ds = daily_sleep.get('data', [{}])[0]
 r = readiness.get('data', [{}])[0]
 r_contributors = r.get('contributors', {})
 
-# --- Parse activity (today only) ---
+# --- Parse activity (today, fallback to yesterday) ---
 activity_data = activity.get('data', [])
-a = next((x for x in activity_data if x.get('day') == TODAY), {})
-# Fallback to yesterday if today not yet available
+a = next((x for x in activity_data if x.get('day') == TODAY), None)
 if not a:
-    activity_today = fetch("daily_activity", YESTERDAY, YESTERDAY)
-    a = activity_today.get('data', [{}])[0]
+    yesterday_data = fetch("daily_activity", YESTERDAY, YESTERDAY)
+    yesterday_list = yesterday_data.get('data', [])
+    a = yesterday_list[0] if yesterday_list else {}
 
 # --- Parse stress ---
 st = stress.get('data', [{}])[0]
