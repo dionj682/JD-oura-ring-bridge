@@ -20,7 +20,7 @@ jobs:
           curl -s "https://api.ouraring.com/v2/usercollection/daily_sleep?start_date=$TODAY&end_date=$TODAY" \
             -H "Authorization: Bearer $OURA_TOKEN" > daily_sleep_raw.json
 
-          curl -s "https://api.ouraring.com/v2/usercollection/sleep?start_date=$TODAY&end_date=$TODAY" \
+          curl -s "https://api.ouraring.com/v2/usercollection/sleep?start_date=$YESTERDAY&end_date=$TODAY" \
             -H "Authorization: Bearer $OURA_TOKEN" > sleep_raw.json
 
           curl -s "https://api.ouraring.com/v2/usercollection/daily_readiness?start_date=$TODAY&end_date=$TODAY" \
