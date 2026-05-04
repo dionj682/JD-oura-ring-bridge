@@ -1,0 +1,24 @@
+{
+  "date": "2026-05-04",
+  "sleep": {
+    "score": 74,
+    "hrv": null,
+    "restingHeartRate": null,
+    "deepSleepSeconds": null,
+    "remSleepSeconds": null,
+    "restfulnessScore": null,
+    "totalSleepSeconds": null
+  },
+  "readiness": {
+    "score": 81,
+    "hrvBalance": 86,
+    "bodyTemperature": 100,
+    "restingHeartRate": 100
+  },
+  "activity": {
+    "date": "2026-05-04",
+    "steps": null,
+    "activeCalories": null,
+    "score": null
+  }
+}
