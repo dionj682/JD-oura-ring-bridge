@@ -79,5 +79,4 @@ output = {
 with open('oura_data.json', 'w') as f:
     json.dump(output, f, indent=2)
 
-print("OUTPUT:", json.dumps(output, indent=2))
 print("Done.")
