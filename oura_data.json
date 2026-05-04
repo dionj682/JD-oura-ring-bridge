@@ -6,19 +6,23 @@
     "restingHeartRate": null,
     "deepSleepSeconds": null,
     "remSleepSeconds": null,
-    "restfulnessScore": null,
-    "totalSleepSeconds": null
+    "restfulnessScore": 74,
+    "totalSleepSeconds": null,
+    "efficiency": null,
+    "latencySeconds": null
   },
   "readiness": {
     "score": 81,
     "hrvBalance": 86,
     "bodyTemperature": 100,
-    "restingHeartRate": 100
+    "restingHeartRate": 100,
+    "activityBalance": 76,
+    "recoveryIndex": 100
   },
   "activity": {
-    "date": "2026-05-04",
-    "steps": null,
-    "activeCalories": null,
-    "score": null
+    "date": "2026-05-03",
+    "steps": 15496,
+    "activeCalories": 1052,
+    "score": 99
   }
 }
