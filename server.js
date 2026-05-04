@@ -1,5 +1,5 @@
 const https = require('https');
-const GITHUB_URL = 'https://raw.githubusercontent.com/dionj682/JD-oura-ring-bridge/main/oura_data.json';
+const GITHUB_URL = `https://raw.githubusercontent.com/dionj682/JD-oura-ring-bridge/main/oura_data.json?t=${Date.now()}`;
 
 require('http').createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
