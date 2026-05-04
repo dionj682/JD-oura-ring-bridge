@@ -1,4 +1,5 @@
-import json
+Here's the exact process.py with all changes marked. Replace your entire file with this:
+pythonimport json
 import datetime
 import subprocess
 import os
@@ -22,7 +23,7 @@ print("Fetching Oura endpoints...")
 
 daily_sleep  = fetch("daily_sleep", TODAY, TODAY)
 readiness    = fetch("daily_readiness", TODAY, TODAY)
-activity     = fetch("daily_activity", YESTERDAY, YESTERDAY)
+activity     = fetch("daily_activity", YESTERDAY, TODAY)
 stress       = fetch("daily_stress", TODAY, TODAY)
 resilience   = fetch("daily_resilience", TODAY, TODAY)
 spo2         = fetch("daily_spo2", TODAY, TODAY)
@@ -34,13 +35,10 @@ ds = daily_sleep.get('data', [{}])[0]
 r = readiness.get('data', [{}])[0]
 r_contributors = r.get('contributors', {})
 
-# --- Parse activity (today, fallback to yesterday) ---
+# --- Parse activity ---
 activity_data = activity.get('data', [])
-a = next((x for x in activity_data if x.get('day') == TODAY), None)
-if not a:
-    yesterday_data = fetch("daily_activity", YESTERDAY, YESTERDAY)
-    yesterday_list = yesterday_data.get('data', [])
-    a = yesterday_list[0] if yesterday_list else {}
+print("ACTIVITY DATA:", json.dumps(activity, indent=2))
+a = activity_data[-1] if activity_data else {}
 
 # --- Parse stress ---
 st = stress.get('data', [{}])[0]
@@ -66,7 +64,7 @@ output = {
         "steps": a.get('steps'),
         "activeCalories": a.get('active_calories')
     },
-    "rhr": r.get('resting_heart_rate'),
+    "rhr": r_contributors.get('resting_heart_rate'),
     "spo2": sp.get('spo2_percentage', {}).get('average') if sp else None,
     "stress": {
         "score": st.get('stress_high')
