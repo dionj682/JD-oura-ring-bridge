@@ -33,14 +33,16 @@ ds = daily_sleep.get('data', [{}])[0]
 
 # --- Parse sleep session (match today's date, fallback to most recent bedtime_end) ---
 sessions = sleep_sessions.get('data', [])
-today_sessions = [x for x in sessions if x.get('day') == TODAY]
+# Match session to daily_sleep record using bedtime_end date
+# Oura files the session under the date sleep STARTED, but daily_sleep uses wake date
+today_sessions = [x for x in sessions if x.get('bedtime_end', '').startswith(TODAY)]
 if today_sessions:
     s = max(today_sessions, key=lambda x: x.get('total_sleep_duration', 0))
 elif sessions:
     s = max(sessions, key=lambda x: x.get('bedtime_end', ''))
 else:
     s = {}
-
+    
 # --- Parse readiness ---
 r = readiness.get('data', [{}])[0]
 r_contributors = r.get('contributors', {})
