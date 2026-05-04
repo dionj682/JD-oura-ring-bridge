@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Fetch Oura data
         env:
@@ -16,7 +16,7 @@ jobs:
         run: |
           curl -s "https://api.ouraring.com/v2/usercollection/daily_sleep?start_date=$(date +%Y-%m-%d)&end_date=$(date +%Y-%m-%d)" \
             -H "Authorization: Bearer $OURA_TOKEN" > sleep_raw.json
-          
+
           curl -s "https://api.ouraring.com/v2/usercollection/daily_readiness?start_date=$(date +%Y-%m-%d)&end_date=$(date +%Y-%m-%d)" \
             -H "Authorization: Bearer $OURA_TOKEN" > readiness_raw.json
 
@@ -27,15 +27,21 @@ jobs:
           import json, datetime
 
           with open('sleep_raw.json') as f:
-            sleep = json.load(f)
+              sleep = json.load(f)
           with open('readiness_raw.json') as f:
-            readiness = json.load(f)
+              readiness = json.load(f)
           with open('activity_raw.json') as f:
-            activity = json.load(f)
+              activity = json.load(f)
+
+          print("SLEEP RAW:", json.dumps(sleep, indent=2))
+          print("READINESS RAW:", json.dumps(readiness, indent=2))
+          print("ACTIVITY RAW:", json.dumps(activity, indent=2))
 
           s = sleep['data'][0] if sleep.get('data') else {}
           r = readiness['data'][0] if readiness.get('data') else {}
           a = activity['data'][0] if activity.get('data') else {}
+
+          contributors = r.get('contributors', {})
 
           output = {
             "date": str(datetime.date.today()),
@@ -50,9 +56,9 @@ jobs:
             },
             "readiness": {
               "score": r.get('score'),
-              "hrvBalance": r.get('contributors', {}).get('hrv_balance'),
-              "bodyTemperature": r.get('contributors', {}).get('body_temperature'),
-              "restingHeartRate": r.get('contributors', {}).get('resting_heart_rate')
+              "hrvBalance": contributors.get('hrv_balance'),
+              "bodyTemperature": contributors.get('body_temperature'),
+              "restingHeartRate": contributors.get('resting_heart_rate')
             },
             "activity": {
               "date": str(datetime.date.today()),
@@ -63,7 +69,9 @@ jobs:
           }
 
           with open('oura_data.json', 'w') as f:
-            json.dump(output, f, indent=2)
+              json.dump(output, f, indent=2)
+
+          print("OUTPUT:", json.dumps(output, indent=2))
           EOF
 
       - name: Commit and push data
