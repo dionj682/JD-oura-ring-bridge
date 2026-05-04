@@ -1,5 +1,4 @@
 const https = require('https');
-
 const GITHUB_URL = 'https://raw.githubusercontent.com/dionj682/JD-oura-ring-bridge/main/oura_data.json';
 
 require('http').createServer((req, res) => {
@@ -11,8 +10,42 @@ require('http').createServer((req, res) => {
     let data = '';
     githubRes.on('data', chunk => data += chunk);
     githubRes.on('end', () => {
-      res.writeHead(200);
-      res.end(data);
+      try {
+        const raw = JSON.parse(data);
+
+        const filtered = {
+          date: raw.date,
+          sleep: {
+            score: raw.sleep?.score ?? null
+          },
+          readiness: {
+            score: raw.readiness?.score ?? null
+          },
+          activity: {
+            date: raw.activity?.date ?? null,
+            score: raw.activity?.score ?? null,
+            steps: raw.activity?.steps ?? null,
+            activeCalories: raw.activity?.activeCalories ?? null
+          },
+          rhr: raw.sleep?.restingHeartRate ?? null,
+          spo2: raw.spo2?.average ?? null,
+          stress: {
+            score: raw.stress?.stressHigh ?? null
+          },
+          resilience: {
+            level: raw.resilience?.score ?? null,
+            sleepRecovery: raw.resilience?.sleepRecovery ?? null,
+            daytimeRecovery: raw.resilience?.daytimeRecovery ?? null,
+            stress: raw.resilience?.stress ?? null
+          }
+        };
+
+        res.writeHead(200);
+        res.end(JSON.stringify(filtered, null, 2));
+      } catch (e) {
+        res.writeHead(500);
+        res.end(JSON.stringify({ error: 'Failed to parse data: ' + e.message }));
+      }
     });
   }).on('error', (e) => {
     res.writeHead(500);
