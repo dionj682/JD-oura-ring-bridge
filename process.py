@@ -45,7 +45,6 @@ r_contributors = r.get('contributors', {})
 
 # --- Parse activity ---
 activity_data = activity.get('data', [])
-print("ACTIVITY DATA:", json.dumps(activity, indent=2))
 a = activity_data[-1] if activity_data else {}
 
 # --- Parse stress ---
