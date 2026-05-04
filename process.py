@@ -32,8 +32,16 @@ spo2            = fetch("daily_spo2", TODAY, TODAY)
 ds = daily_sleep.get('data', [{}])[0]
 
 # --- Parse sleep session (longest) ---
-sessions = sleep_sessions.get('data', [])
-s = max(sessions, key=lambda x: x.get('total_sleep_duration', 0)) if sessions else {}
+sessions = sleep.get('data', [])
+# Prefer session filed under today, fallback to most recent
+today_sessions = [x for x in sessions if x.get('day') == TODAY]
+if today_sessions:
+    s = max(today_sessions, key=lambda x: x.get('total_sleep_duration', 0))
+elif sessions:
+    # Sort by bedtime_end to get most recently completed sleep
+    s = max(sessions, key=lambda x: x.get('bedtime_end', ''))
+else:
+    s = {}
 
 # --- Parse readiness ---
 r = readiness.get('data', [{}])[0]
