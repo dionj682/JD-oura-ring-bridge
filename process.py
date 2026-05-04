@@ -20,12 +20,21 @@ def fetch(endpoint, start, end):
 
 print("Fetching Oura endpoints...")
 
-daily_sleep  = fetch("daily_sleep", TODAY, TODAY)
-readiness    = fetch("daily_readiness", TODAY, TODAY)
-activity     = fetch("daily_activity", YESTERDAY, TODAY)
-stress       = fetch("daily_stress", TODAY, TODAY)
-resilience   = fetch("daily_resilience", TODAY, TODAY)
-spo2         = fetch("daily_spo2", TODAY, TODAY)
+daily_sleep   = fetch("daily_sleep", TODAY, TODAY)
+readiness     = fetch("daily_readiness", TODAY, TODAY)
+activity      = fetch("daily_activity", YESTERDAY, TODAY)
+stress        = fetch("daily_stress", TODAY, TODAY)
+resilience    = fetch("daily_resilience", TODAY, TODAY)
+spo2          = fetch("daily_spo2", TODAY, TODAY)
+sleep_session = fetch("sleep", YESTERDAY, TODAY)
+sessions = sleep_session.get('data', [])
+rhr = None
+for s in sessions:
+    if s.get('bedtime_end', '')[:10] == TODAY:
+        rhr = s.get('lowest_heart_rate')
+        break
+if not rhr and sessions:
+    rhr = sessions[-1].get('lowest_heart_rate')
 
 # --- Parse daily sleep ---
 ds = daily_sleep.get('data', [{}])[0]
@@ -63,7 +72,7 @@ output = {
         "steps": a.get('steps'),
         "activeCalories": a.get('active_calories')
     },
-    "rhr": r_contributors.get('resting_heart_rate'),
+    "rhr": rhr,
     "spo2": sp.get('spo2_percentage', {}).get('average') if sp else None,
     "stress": {
         "score": st.get('stress_high')
