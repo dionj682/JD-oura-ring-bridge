@@ -1,5 +1,4 @@
-Here's the exact process.py with all changes marked. Replace your entire file with this:
-pythonimport json
+import json
 import datetime
 import subprocess
 import os
