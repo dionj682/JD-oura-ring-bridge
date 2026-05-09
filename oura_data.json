@@ -1,10 +1,10 @@
 {
   "date": "2026-05-09",
   "sleep": {
-    "score": 45
+    "score": 67
   },
   "readiness": {
-    "score": 65
+    "score": 83
   },
   "activity": {
     "date": "2026-05-08",
@@ -13,14 +13,14 @@
     "activeCalories": 221
   },
   "rhr": 47,
-  "spo2": 95.821,
+  "spo2": 95.75,
   "stress": {
-    "score": 900
+    "score": 0
   },
   "resilience": {
     "level": "adequate",
-    "sleepRecovery": 46.2,
-    "daytimeRecovery": 48.9,
-    "stress": 32.2
+    "sleepRecovery": 51.3,
+    "daytimeRecovery": 52.6,
+    "stress": 32.0
   }
 }
