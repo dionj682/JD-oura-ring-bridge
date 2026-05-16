@@ -1,26 +1,26 @@
 {
-  "date": "2026-05-15",
+  "date": "2026-05-16",
   "sleep": {
-    "score": 67
+    "score": 89
   },
   "readiness": {
-    "score": 77
+    "score": 88
   },
   "activity": {
-    "date": "2026-05-14",
-    "score": 81,
-    "steps": 5460,
-    "activeCalories": 348
+    "date": "2026-05-15",
+    "score": 91,
+    "steps": 5774,
+    "activeCalories": 515
   },
-  "rhr": 46,
-  "spo2": 95.616,
+  "rhr": 52,
+  "spo2": 95.839,
   "stress": {
-    "score": 0
+    "score": 900
   },
   "resilience": {
     "level": "solid",
-    "sleepRecovery": 59.4,
-    "daytimeRecovery": 57.5,
-    "stress": 34.3
+    "sleepRecovery": 62.5,
+    "daytimeRecovery": 58.7,
+    "stress": 37.0
   }
 }
