@@ -4,7 +4,7 @@
     "score": 58
   },
   "readiness": {
-    "score": 70
+    "score": 71
   },
   "activity": {
     "date": "2026-07-03",
@@ -13,14 +13,14 @@
     "activeCalories": 680
   },
   "rhr": 64,
-  "spo2": 92.388,
+  "spo2": 92.357,
   "stress": {
-    "score": 0
+    "score": 900
   },
   "resilience": {
     "level": "limited",
-    "sleepRecovery": 28.6,
-    "daytimeRecovery": 37.6,
+    "sleepRecovery": 28.7,
+    "daytimeRecovery": 37.7,
     "stress": 28.4
   }
 }
